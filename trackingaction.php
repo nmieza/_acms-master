@@ -62,11 +62,10 @@ align-items: center;
 }
 </style>
 
-<center><table style="width: 20%;" id="shipment" class="table table-striped table-bordered dt-responsive nowrap"><th>Reference Code</th><th>Status (1 = Pending,
-  2 = Accepted,
-  3 = In Transit,
-  4 = Out for Delivery,
-  5 = Delivered)</th><th>Date Created</th></tr></center>      
+<center><table style="width: 20%;" id="shipment" class="table table-striped table-bordered dt-responsive nowrap">
+<th>Reference Code</th>
+<th>Shipment Status</th>
+  <th>Date & Time</th></tr></center>      
 
   <?php include 'log.php'; ?><br><br>
 
@@ -75,25 +74,32 @@ align-items: center;
   $row= 1;
   $conn = mysqli_connect("localhost", "root", "", "aircargo_system");
       $result = mysqli_query($conn,"SELECT * FROM shipment WHERE id=$_POST[id]");
-      if ($row || mysqli_num_rows($result) != 0)
-      {
-        while($row = mysqli_fetch_assoc($result))
-        {
-          echo "<tr>";
-          echo "<td><center>". $row ['id'] ."</td>";
-          echo "<td><center>". $row ['status'] ." </td>";
-          echo "<td><center>". $row ['date_created'] ."</td>";
-          echo "</tr>";
-        }
-      }
 
-      else
-      {
-        echo "<script>alert('This ic number do not have any shipment !')</script>";
-        header ('refresh:0 url="tracking.php"');
-      }
-
-  ?>
+      if (mysqli_num_rows($sql)>0) {  
+        while ($row=mysqli_fetch_assoc($sql)) { ?>  
+        <tr>                   
+             <td align="center"><?php echo $row['id'] ?></td>  
+             <td align="center">  
+                  <?php  
+                  if ($row['status']==1) {  
+                       echo "Pending";  
+                  }if ($row['status']==2) {  
+                       echo "Accepted";  
+                  }if ($row['status']==3) {  
+                       echo "In Transit";  
+                  }if ($row['status']==4) {  
+                        echo "Out For Delivery";
+                  }if ($row['status']==5) {  
+                        echo "Delivered";
+                  }  
+                  ?>  
+ </td>
+            <td align="center"><?php echo $row['date_created'] ?></td>  
+ </tr>
+<?php      }  
+} ?>  
+     </table> 
+        
 
 <script>
   
